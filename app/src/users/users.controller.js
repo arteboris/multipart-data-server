@@ -7,6 +7,45 @@ const filePath = path.join(__dirname, '../../', 'data/users/', 'all-users.json')
 class UsersController {
     constructor() {}
 
+    
+    get sendUsers() {
+        return this._sendUsers.bind(this);
+    };
+
+    async _sendUsers(req, res, next) {
+        const ids = req.query.ids;
+
+        try {
+            await fs.readFile(filePath, 'utf8', (err, contents) => {
+                if (err) throw err;
+                const allUsers = JSON.parse(contents);
+                usersModel.sendUsers(ids, allUsers, res);
+                return;
+            });
+        } catch(err) {
+            return next(err);
+        };
+    };
+
+    get sendUserId() {
+        return this._sendUserId.bind(this);
+    };
+
+    async _sendUserId(req, res, next) {
+        const id = +req.params.id;
+        try {
+            await fs.readFile(filePath, 'utf8', (err, contents) => {
+                if(err) throw err;
+                const allUsers = JSON.parse(contents);
+                usersModel.sendUserId(id, allUsers, res);
+                return;
+            });
+        } catch(err) {
+            return next(err);
+        };
+    };
+
+
     get createUser() {
         return this._createUser.bind(this);
     };
@@ -49,6 +88,27 @@ class UsersController {
             })
 
         } catch (err) {
+            next(err);
+        };
+    };
+
+    get updateUser() {
+        return this._updateUser.bind(this);
+    };
+
+    async _updateUser(req, res, next) {
+        const id = +req.params.id;
+        const changeUser = req.body;
+        try {
+            await fs.readFile(filePath, 'utf8', (err, contents) => {
+                if(err) throw err;
+
+                const allUsers = JSON.parse(contents);
+                usersModel.updateUser(id, changeUser, allUsers, res);
+                return;
+            })
+
+        } catch(err){
             next(err);
         };
     };

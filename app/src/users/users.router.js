@@ -5,12 +5,16 @@ const usersController = require('./users.controller');
 const router = Router();
 
 router
-.get('/', (req, res, next) => {
-    res.status(200).json('Users!!!!');
-})
+.get('/', usersValidator.sendUsers,
+ usersController.sendUsers)
+.get('/:id', usersValidator.sendUserId,
+usersController.sendUserId)
 .post('/', 
 usersValidator.createUser, 
 usersController.createUser)
-.delete('/:id', usersController.deleteUser);
+.put('/:id', usersValidator.updateUser, 
+usersController.updateUser)
+.delete('/:id', usersValidator.deleteUser,
+ usersController.deleteUser);
 
 module.exports = router;
