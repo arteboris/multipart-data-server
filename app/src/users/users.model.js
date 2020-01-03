@@ -11,13 +11,24 @@ class UsersModel {
         return this._sendUsers.bind(this);
     };
 
-    async _sendUsers(ids, allUsers, res) {
-        if(ids) {
+    async _sendUsers(idsQuery, allUsers, res) {
+        if(idsQuery) {
+            const ids = idsQuery.split(",");
+
+            const usersIds = allUsers.reduce((acc, elem) => {
+                for(let id of ids) {
+                    if(id.includes(elem.id)) acc = [...acc, elem];
+                };
+                return acc;
+            }, []);
             
-        } else {
-            return res.status(200).json({'status': 'success', 
-        'users': allUsers});
-        };
+        if(usersIds.length > 0) return res.status(200).json({'status': 'success','users': usersIds});
+
+        else if(usersIds.length === 0) return  res.status(400).json({'status': 'no users', 'users': []});
+
+        } else if(allUsers) return res.status(200).json({'status': 'success', 'users': allUsers});
+        
+        else if(!allUsers) return res.status(400).json({'status': 'no users', 'users': []});
     }
 
     get sendUserId() {
@@ -32,7 +43,7 @@ class UsersModel {
         'user': userId});
         } else {
             return res.status(400).json({'status': 'no user', 
-        'user': [] });
+        'user': {} });
         };
     };
 

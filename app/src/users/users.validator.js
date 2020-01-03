@@ -8,8 +8,17 @@ class UsersValidator {
     };
 
     async _sendUsers(req, res, next) {
-        return next();
-    }
+        const url = req.url;
+        const ids = req.query.ids;
+
+        if(!url.includes('?')){
+            return next();
+        } else if(url.includes('?') && ids){
+            return next();
+        } else {
+            return res.status(404).json('SmartBin: Invalid URL');
+        };
+    };
 
     
     get sendUserId() {

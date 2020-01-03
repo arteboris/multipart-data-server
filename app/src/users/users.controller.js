@@ -13,14 +13,13 @@ class UsersController {
     };
 
     async _sendUsers(req, res, next) {
-        const ids = req.query.ids;
+        const idsQuery = req.query.ids;
 
         try {
             await fs.readFile(filePath, 'utf8', (err, contents) => {
                 if (err) throw err;
                 const allUsers = JSON.parse(contents);
-                usersModel.sendUsers(ids, allUsers, res);
-                return;
+                usersModel.sendUsers(idsQuery, allUsers, res);
             });
         } catch(err) {
             return next(err);
@@ -38,7 +37,6 @@ class UsersController {
                 if(err) throw err;
                 const allUsers = JSON.parse(contents);
                 usersModel.sendUserId(id, allUsers, res);
-                return;
             });
         } catch(err) {
             return next(err);
@@ -62,7 +60,6 @@ class UsersController {
                 
                 const allUsers = JSON.parse(contents);
                 usersModel.createUser(user, allUsers, res);
-                return;
             });
 
         } catch(err) {
@@ -84,7 +81,6 @@ class UsersController {
 
                 const allUsers = JSON.parse(contents);
                 usersModel.deleteUser(id, allUsers, res);
-                return;
             })
 
         } catch (err) {
@@ -105,7 +101,6 @@ class UsersController {
 
                 const allUsers = JSON.parse(contents);
                 usersModel.updateUser(id, changeUser, allUsers, res);
-                return;
             })
 
         } catch(err){
