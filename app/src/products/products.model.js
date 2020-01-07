@@ -91,11 +91,9 @@ class ProductsModel {
         const findUpdateProduct = allProducts.find(elem => elem.id === id);
 
         if(findUpdateProduct){
-            const updateProduct = {
-                findUpdateProduct,
-                ...changeProduct,
-                modified: new Date().toLocaleString()
-            };
+            const updateProduct = Object.assign(findUpdateProduct, changeProduct);
+            updateProduct.modified = new Date().toLocaleString();
+            
 
             const newAllProducts = allProducts.map(elem => elem.id === id ? updateProduct : elem);
 

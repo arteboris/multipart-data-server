@@ -40,6 +40,11 @@ class ProductsValidator {
     };
     
     async _createProduct(req, res, next) {
+        const url = req.url;
+
+        if(url.includes('?')) {
+            return res.status(404).json('SmartBin: Invalid URL');
+        } else {
         const createProductRules = validator.isObject()
         .withRequired("name", validator.isString())
         .withRequired("description", validator.isString())
@@ -53,6 +58,7 @@ class ProductsValidator {
             };
             return next();
         });
+    };
     };
 
     get updateProduct() {

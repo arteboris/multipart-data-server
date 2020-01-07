@@ -39,17 +39,23 @@ class UsersValidator {
     };
 
     async _createUser(req, res, next) {
-        const createUserRules = validator.isObject()
-        .withRequired("name", validator.isString())
-        .withRequired("tel", validator.isNumber())
-        .withRequired("email", validator.isString());
+        const url = req.url;
 
-        validator.run(createUserRules, req.body, (errCount, errors) => {
-            if (errCount) {
-                return res.status(400).json(errors);
-            };
-            return next();
-        });
+        if(url.includes('?')) {
+            return res.status(404).json('SmartBin: Invalid URL');
+        } else {
+            const createUserRules = validator.isObject()
+            .withRequired("name", validator.isString())
+            .withRequired("tel", validator.isNumber())
+            .withRequired("email", validator.isString());
+    
+            validator.run(createUserRules, req.body, (errCount, errors) => {
+                if (errCount) {
+                    return res.status(400).json(errors);
+                };
+                return next();
+            });
+        };
     };
 
     get deleteUser () {
